@@ -1,7 +1,7 @@
 create database location;
 use location
-create table users (iduser int AUTO_INCREMENT PRIMARY KEY ,firstname varchar(50) not null,lastname varchar(50) not null,cin varchar(10)not null,num varchar(20),email varchar(50) ,password varchar(100) );
-create table maisan(idmaisan int AUTO_INCREMENT PRIMARY KEY , adresse varchar(50) , surface int not null,iduser int ,idville int );
+create table users (iduser int AUTO_INCREMENT PRIMARY KEY ,firstname varchar(50) not null,lastname varchar(50) not null,cin varchar(10)not null,num varchar(20),email varchar(50) not null  ,password varchar(100) not null , UNIQUE (email) );
+create table maisan(idmaisan int AUTO_INCREMENT PRIMARY KEY , adresse varchar(50) , surface int not null,chambre int , prix int,iduser int ,idville int );
 create table villes(idville int AUTO_INCREMENT PRIMARY KEY , ville varchar(50));
 create table contient(idcon int AUTO_INCREMENT PRIMARY KEY ,idmaisan int,idphoto int );
 create table reserver(idres int AUTO_INCREMENT PRIMARY KEY , idmaisan int,iduser int, date_debut date , date_fin date);
