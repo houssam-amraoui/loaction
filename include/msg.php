@@ -36,6 +36,13 @@
 	   
 	  $client_msg['17'] = "envato username or purchase code is wrong!"; 
 
-	  $client_msg['18'] = "Verified successfully!";  
-	  
+	  $client_msg['18'] = "Verified successfully!";
+
+	  $client_msg['19'] = "Password not the same!";
+
+      $client_msg['20'] ="Email is already exist";
+
+      $client_msg['21'] ="registered secsufull";
+
+      $client_msg['22'] ="champs is empty";
 ?>

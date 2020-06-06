@@ -1,24 +1,24 @@
-<!--#ffcfcf; -->
 
 <?php
-include("include/connection.php");
-if(isset($_SESSION['admin_name']))
+session_start();
+/*if(isset($_SESSION['admin_name']))
   {
     header("Location:home.php");
     exit;
-  }
+  }*/
 ?>
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Sign Up Form by Colorlib</title>
 
     <!-- Font Icon -->
     <link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css">
 
-   <style> 
+ <style> 
     /* @extend display-flex; */
-display-flex, .display-flex, .display-flex-center, .signup-content, .signin-content, .social-login, .socials {
+display-flex, .display-flex, .display-flex-center, .signup-content,  .social-login, .socials {
   display: flex;
   display: -webkit-flex; }
 
@@ -85,18 +85,36 @@ body {
   align-items: center;
  }
 
-    
+.position-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+ }
 
+       
+       
+       
+       
+       
+.signup {
+  margin-bottom: 150px; }
 
- .signin-form, .signin-image {
+.signup-content {
+  padding: 75px 0; }
+
+.signup-form, .signup-image {
   width: 50%;
   overflow: hidden; }
 
+.signup-image {
+  margin: 0 55px; }
 
 .form-title {
   margin-bottom: 33px; }
 
-
+.signup-image {
+  margin-top: 45px; }
 
 figure {
   margin-bottom: 50px;
@@ -115,8 +133,6 @@ figure {
   .form-submit:hover {
     background: #4292dc; }
 
-#signin {
-  margin-top: 16px; }
 
 .signup-image-link {
   font-size: 14px;
@@ -128,6 +144,13 @@ figure {
   font-size: 13px;
   color: #222; }
 
+.signup-form {
+  margin-left: 75px;
+  margin-right: 75px;
+  padding-left: 34px; }
+
+.register-form {
+  width: 100%; }
 
 .form-group {
   position: relative;
@@ -153,7 +176,7 @@ input[type=checkbox]:not(old) {
   font-size: 1em;
   display: none; }
        
-input[type=checkbox]:not(old):checked + label > span:before {
+       input[type=checkbox]:not(old):checked + label > span:before {
   content: '\f26b';
   display: block;
   color: #222;
@@ -232,9 +255,7 @@ label.valid {
 .material-icons-name {
   font-size: 18px; }
 
-.signin-content {
-  padding-top: 67px;
-  padding-bottom: 87px; }
+
 
 .social-login {
   align-items: center;
@@ -264,14 +285,6 @@ label.valid {
       transition-property: transform;
       transition-timing-function: ease-out; }
 
-.signin-form {
-  margin-right: 90px;
-  margin-left: 80px; }
-
-.signin-image {
-  margin-left: 110px;
-  margin-right: 20px;
-  margin-top: 10px; }
 
 @media screen and (max-width: 1200px) {
   .container {
@@ -281,21 +294,20 @@ label.valid {
   .container {
     max-width: 1200px; } }
 @media screen and (max-width: 768px) {
-  .signup-content, .signin-content {
+  .signup-content {
     flex-direction: column;
     justify-content: center;
     }
 
-
-
-  .signin-image {
+  .signup-form {
     margin-left: 0px;
     margin-right: 0px;
-    margin-top: 50px;
-    order: 2;
-    }
+    padding-left: 0px;
+    /* box-sizing: border-box; */
+    padding: 0 30px; }
 
-  .signup-form, .signup-image, .signin-form, .signin-image {
+
+  .signup-form, .signup-image{
     width: auto; }
 
   .social-login {
@@ -305,11 +317,7 @@ label.valid {
   .form-button {
     text-align: center; }
 
-  .signin-form {
-    order: 1;
-    margin-right: 0px;
-    margin-left: 0px;
-    padding: 0 30px; }
+
 
   .form-title {
     text-align: center; } }
@@ -325,50 +333,75 @@ label.valid {
 
     
     </style>
-    
 </head>
 <body>
 
     <div class="main">
 
-
-        <!-- Sing in  Form -->
-        <section class="sign-in">
+        <section class="signup">
             <div class="container">
-                <div class="signin-content">
-                    <div class="signin-image">
-                        <figure><img src="img/signin-image.jpg" alt="sing up image"></figure>
-                        <a href="registre.php" class="signup-image-link">Create an account</a>
-                    </div>
-
-                    <div class="signin-form">
-                        <h2 class="form-title">Sign in</h2>
-                        <form method="POST" action="login_db.php" class="register-form" id="login-form">
+                <div class="signup-content">
+                    <div class="signup-form">
+                        <h2 class="form-title">Sign up</h2>
+                        <form method="POST" action="registre_db.php" class="register-form" id="register-form">
                             <div class="form-group">
-                                <label for="your_name"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                                <input type="text" required name="username" id="your_name" placeholder="Your Name"/>
+                                <label for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                                <input type="text" name="first_name" id="name" required placeholder="Your First Name"/>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="name"><i class="zmdi zmdi-account-o material-icons-name"></i></label>
+                                <input type="text" name="last_name" id="name" required placeholder="Your Last Name"/>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="name"><i class="zmdi zmdi-balance material-icons-name"></i></label>
+                                <input type="text" name="cin" id="name" required placeholder="Your CIN"/>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="name"><i class="zmdi zmdi-phone material-icons-name"></i></label>
+                                <input type="text" name="number" id="name" required placeholder="Your number"/>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email"><i class="zmdi zmdi-email"></i></label>
+                                <input type="email" name="email" id="email" required placeholder="Your Email"/>
                             </div>
                             <div class="form-group">
-                                <label for="your_pass"><i class="zmdi zmdi-lock"></i></label>
-                                <input type="password" required name="password" id="your_pass" placeholder="Password"/>
+                                <label for="pass"><i class="zmdi zmdi-lock"></i></label>
+                                <input type="password" name="pass" id="pass" required placeholder="Password"/>
                             </div>
                             <div class="form-group">
-                                <input type="checkbox" name="remember-me" id="remember-me" class="agree-term" />
-                                <label for="remember-me" class="label-agree-term"><span><span></span></span>Remember me</label>
+                                <label for="re-pass"><i class="zmdi zmdi-lock-outline"></i></label>
+                                <input type="password" name="re_pass" id="re_pass" required placeholder="Repeat your password"/>
                             </div>
-                            <div class="form-group form-button">
-                                <input type="submit" name="login" id="signin" class="form-submit" value="Log in"/>
+                            
+                            <div class="form-group">
+                                <input type="checkbox" name="agree-term" id="agree-term" required class="agree-term" />
+                                <label for="agree-term"  class="label-agree-term"><span><span></span></span>I agree all statements in  <a href="#" class="term-service">Terms of service</a></label>
                             </div>
-                        </form>
-                             <?php if(isset($_SESSION['msg'])){?>
+                            
+                            <?php if(isset($_SESSION['msg'])){?>
                                 <div class="msg"> <?php echo $_SESSION['msg']; ?></div>
                              <?php unset($_SESSION['msg']);}?>
-
+                            
+                            <div class="form-group form-button">
+                                <input type="submit" name="signup" id="signup" class="form-submit" value="Register"/>
+                                
+                            </div>
+                        </form>
+                        
+                    </div>
+                    <div class="signup-image">
+                        <figure><img src="img/signup-image.jpg" alt="sing up image"></figure>
+                        <a href="login.php" class="signup-image-link">I am already member</a>
                     </div>
                 </div>
             </div>
         </section>
 
+        
     </div>
 
    
