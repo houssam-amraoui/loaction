@@ -18,17 +18,23 @@ if(isset($_POST["submit"])){
 	$prix = filter_input(INPUT_POST, 'prix', FILTER_SANITIZE_STRING);
     $address = filter_input(INPUT_POST, 'address', FILTER_SANITIZE_STRING);
     $ville = filter_input(INPUT_POST, 'ville', FILTER_SANITIZE_STRING);
+
+    
     
 	 if ($ville!='0' || $chambre!='0'){
 		$qry="insert into maisan (adresse, surface,chambre,prix ,titel ,description ,datepub ,iduser ,idville )  values ('$address',$surface,$chambre,$prix,'$title','$description',NOW(),".$_SESSION["iduser"].",$ville);";
         
 		if(!mysqli_query($mysqli,$qry)){
             $_SESSION['msg'] = mysqli_error($mysqli);
-            
         }else{
-            $id = mysqli_insert_id($mysqli);     
+            $id = mysqli_insert_id($mysqli); 
+            
             $qry1= 'insert into vu (idmaisan,vues )  values ('.$id.',1);';
             mysqli_query($mysqli,$qry1);
+            
+            $qry2= "insert into reserver (idmaisan, iduser, date_debut , date_fin) values (".$id.",".$_SESSION['iduser'].",'2020-01-01','2020-01-01');";
+            mysqli_query($mysqli,$qry2);
+            
              for($i = 0; $i < count($images["name"]); $i++){
                 $dst =time().rand(0,999)."_".$_SESSION['iduser']."_".$images["name"][$i];
                 move_uploaded_file($images["tmp_name"][$i],"img/".$dst);

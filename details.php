@@ -213,7 +213,7 @@ function showtoolbar(){
   position: absolute;
   bottom: 15px;
   left: 15px;
-  color: white;
+  color: #41a3ff;
   font-size: 20px;
 }
 

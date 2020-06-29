@@ -3,11 +3,13 @@ include("include/connection.php");
 
 
 
-function creatpost($url,$imegeurl,$decr,$titel,$chambre,$surface,$adresse,$description,$datepub,$prix,$ville)
+function creatpost($id,$imegeurl,$decr,$titel,$chambre,$surface,$adresse,$description,$datepub,$prix,$ville,$idres,$date_debut,$date_fin)
 {
+    $isres = (date($date_fin) <= date("Y-m-d"));
+    
 $postp ='<div class="item">
         <div class="thumb-item">
-            <a href="'.$url.'">
+            <a href= "details.php?id='.$id.'">
                 <img src="'.$imegeurl.'" alt="'.$decr.'" title="'.$decr.'">
                 <span>'.$prix.' DH</span>
             </a>
@@ -15,7 +17,7 @@ $postp ='<div class="item">
         <div class="body-item">
         
 				<h2 class="SpremiumH2">
-					<a href="'.$url.'">'.$titel.'</a></h2>
+					<a href="details.php?id='.$id.'">'.$titel.'</a></h2>
 				<div>
 					<h4>'.$chambre.' chambres, '.$surface.' m²</h4>
 				</div>
@@ -25,6 +27,13 @@ $postp ='<div class="item">
 					<span class="SpremiumDetails iconPadR">'.$datepub.'</span>
 					
 				</div>
+                 <div class="addres">
+                <label class="card-banner card-blue-light" >
+                '.(($isres) ? 'disponible' : 'réserver de '.$date_debut.' a '.$date_fin).'
+                
+                
+                </label>
+                </div>
 			</div>
         </div>';
     
@@ -153,8 +162,8 @@ function showtoolbar(){
     border-radius: 10px;
     display: table;
     background: #fff;
-    margin-top: 50px;
-    padding: 40px;
+    margin-top: 4px;
+    padding: 36px;
     margin-left: 10%;
     }
     /*--------continer------*/
@@ -167,6 +176,8 @@ function showtoolbar(){
     background: #eee;
     overflow: hidden;
     margin-top: 20px;
+    margin-left: 20px;
+
     }
     
     .thumb-item {
@@ -203,6 +214,56 @@ function showtoolbar(){
     color: #fff;
     font-weight: bolder;
 }
+    .addres {
+    float: right;
+}
+    .addres label {
+    padding: 10px;
+    color: #fff;
+    font-size: 14px;
+}
+    .card-blue-light {
+    background: linear-gradient(60deg,#66bb6a,#43a047);
+}
+    .card-banner {
+    width: 100%;
+    position: static;
+    overflow: auto;
+    display: block;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    margin: 13px 0;
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
+    color: rgba(0,0,0, 0.87);
+}
+    
+    @media screen and (max-width: 1024px) {
+        .thumb-item span {
+            right: 12px;
+        }
+        .thumb-item {
+            float: none; 
+            width: 100%;
+            margin-right: 0px;
+        }
+        
+        .body-item {
+            float: none;
+            width: 93%;
+            margin: auto;
+            margin-top: 19px;
+        }
+        
+        .item {
+            width: 90%;
+        }
+        
+        .continer {
+            width: 100%;
+        }
+        
+    
+    }
     
     </style>
 
@@ -218,7 +279,7 @@ function showtoolbar(){
     
     <div class="top-continer">
         <div class="himg">
-            <img  src="https://a0.muscache.com/4ea/air/r:w775-h300-sfit,e:fjpg-c70/pictures/c49d2d28-c0ae-484b-9db9-0dc93a5e1cd4.jpg" >
+            <img  src="img/home.jpg" >
         </div>
         
         <nav class="header-top">
@@ -242,8 +303,7 @@ function showtoolbar(){
                         while($row = mysqli_fetch_assoc($result)) {
                 
                             echo '<option value="'.$row["idville"].'" '.((isset($_POST["ville"]) && $_POST["ville"] == $row["idville"]) ? "selected" : "").' > '.$row["ville"].'</option>';
-                            
-                            
+
                         }
                         ?>
                     </select>
@@ -257,8 +317,7 @@ function showtoolbar(){
                     <input type="number" placeholder="Maximum" name="prmax" value="<?php if(isset($_POST["prmax"])) echo $_POST["prmax"]; ?>">
                     <p>nombre de chambre</p>
                     <select name="chambre" >
-                        <option disabled="disabled" selected="selected">chambre</option>
-                        <option value="1" <?php echo ((isset($_POST["chambre"]) && $_POST["chambre"] == "1") ? "selected" : ""); ?>>1 ou plus</option>
+                        <option value="1" selected >1 ou plus</option>
                         <option value="2" <?php echo ((isset($_POST["chambre"]) && $_POST["chambre"] == "2") ? "selected" : ""); ?>>2 ou plus</option>
                         <option value="3" <?php echo ((isset($_POST["chambre"]) && $_POST["chambre"] == "3") ? "selected" : ""); ?>>3 ou plus</option>
                         <option value="4" <?php echo ((isset($_POST["chambre"]) && $_POST["chambre"] == "4") ? "selected" : ""); ?>>4 ou plus</option>
@@ -266,8 +325,12 @@ function showtoolbar(){
                         <option value="6" <?php echo ((isset($_POST["chambre"]) && $_POST["chambre"] == "6") ? "selected" : ""); ?>>6 ou plus</option>
                     </select>
                     
+                    <p>affichage</p>
+                    <input type="checkbox"  name="nores" id="nores"  ><label for="nores"> Ne pas afficher les maison réserver</label>
+                    
+                    
                     <br/>
-                          
+                      <br/>    
                     <button type="submit" name="submit">Search</button>
                     
                     </form>
@@ -281,13 +344,12 @@ function showtoolbar(){
    
         <?php 
         
-        $sql = 'SELECT m.idmaisan, adresse, surface,chambre,prix ,titel ,description ,datepub, p.urlphoto, p.decr , v.ville FROM maisan m inner join  photos p on p.idphoto = (select idphoto from photos ph where ph.idmaisan = m.idmaisan limit 1) inner join villes v on v.idville = m.idville ORDER BY datepub desc limit 50  ';
+        $sql = 'SELECT m.idmaisan, adresse, surface,chambre,prix ,titel ,description ,datepub, p.urlphoto, p.decr , v.ville ,r.idres,r.date_debut , r.date_fin FROM maisan m inner join photos p on p.idphoto = (select idphoto from photos ph where ph.idmaisan = m.idmaisan limit 1) inner join reserver r on r.idres = ( SELECT idres FROM reserver re WHERE re.idmaisan = m.idmaisan ORDER BY date_fin DESC LIMIT 1) inner join villes v on v.idville = m.idville ORDER BY datepub desc limit 50';
         
         if(isset($_POST["submit"])){
             
-            $sql = 'SELECT m.idmaisan, adresse, surface,chambre,prix ,titel ,description ,datepub, p.urlphoto, p.decr FROM maisan m inner join  photos p on p.idphoto = (select idphoto from photos ph where ph.idmaisan = m.idmaisan limit 1) inner join villes v on v.idville = m.idville where v.idville = '.$_POST["ville"].' and (surface between '.(($_POST["sumin"] == "") ? "0" : $_POST["sumin"]).' and 
+            $sql = 'SELECT m.idmaisan, adresse, surface,chambre,prix ,titel ,description ,datepub, p.urlphoto, p.decr , v.ville ,r.idres,r.date_debut , r.date_fin FROM maisan m inner join photos p on p.idphoto  = (select idphoto from photos ph where ph.idmaisan = m.idmaisan limit 1) inner join reserver r on r.idres = ( SELECT idres FROM reserver re WHERE re.idmaisan = m.idmaisan ORDER BY date_fin DESC LIMIT 1) '.((isset($_POST["nores"])) ? 'and r.date_fin < now()' : '').' inner join villes v on v.idville = m.idville where v.idville = '.$_POST["ville"].' and (surface between '.(($_POST["sumin"] == "") ? "0" : $_POST["sumin"]).' and 
             '.(($_POST["sumax"] == "") ? "1000" : $_POST["sumax"]).') and  (prix between '.(($_POST["prmin"] == "") ? "0" : $_POST["prmin"]).' and '.(($_POST["prmax"] == "") ? "10000" : $_POST["prmax"]).') and chambre >= '.$_POST["chambre"].' ORDER BY datepub desc limit 50 ';
-            echo $sql;
             /*$str = 'In My Cart : 11 items';
             $int = (int) filter_var($str, FILTER_SANITIZE_NUMBER_INT);
             make sision an quiry
@@ -300,8 +362,7 @@ function showtoolbar(){
 
          if (mysqli_num_rows($result) > 0) {
             while($row = mysqli_fetch_assoc($result)) {
-                
-                creatpost('details.php?id='. $row["idmaisan"],'img/'.$row["urlphoto"],$row["decr"],$row["titel"],$row["chambre"],$row["surface"],$row["adresse"],$row["description"],$row["datepub"],$row["prix"],$row["ville"]);
+                creatpost($row["idmaisan"],'img/'.$row["urlphoto"],$row["decr"],$row["titel"],$row["chambre"],$row["surface"],$row["adresse"],$row["description"],$row["datepub"],$row["prix"],$row["ville"],$row["idres"],$row["date_debut"],$row["date_fin"]);
             }
          } else {
             echo "0 results";

@@ -2,11 +2,40 @@
 
 <?php
 include("include/connection.php");
+
+
+if(isset($_COOKIE["email"])) {
+  $qry="select * from users where email='".$_COOKIE["email"]."' and password='".$_COOKIE["password"]."'";
+		 
+		$result=mysqli_query($mysqli,$qry);		
+		
+		if(mysqli_num_rows($result) > 0)
+		{ 
+			$row=mysqli_fetch_assoc($result);
+            
+
+			$_SESSION['iduser']=$row['iduser'];
+		    $_SESSION['admin_name']=$row['firstname']." ".$row['lastname'];
+            
+            
+            setcookie("email", $username, time() + (86400 * 7), "/");
+            setcookie("password", $password, time() + (86400 * 7), "/");
+			  
+			header( "Location:home.php");
+			exit;
+				
+		}
+}
+
+
+
 if(isset($_SESSION['admin_name']))
   {
     header("Location:home.php");
     exit;
   }
+
+
 ?>
 <html>
 <head>
@@ -151,7 +180,7 @@ input[type=checkbox]:not(old) {
   margin: 0;
   padding: 0;
   font-size: 1em;
-  display: none; }
+  }
        
 input[type=checkbox]:not(old):checked + label > span:before {
   content: '\f26b';
@@ -312,7 +341,8 @@ label.valid {
     padding: 0 30px; }
 
   .form-title {
-    text-align: center; } }
+    text-align: center; } 
+       }
 @media screen and (max-width: 400px) {
   .social-login {
     flex-direction: column;
@@ -354,7 +384,7 @@ label.valid {
                             </div>
                             <div class="form-group">
                                 <input type="checkbox" name="remember-me" id="remember-me" class="agree-term" />
-                                <label for="remember-me" class="label-agree-term"><span><span></span></span>Remember me</label>
+                                <label for="remember-me" class="label-agree-term">Remember me</label>
                             </div>
                             <div class="form-group form-button">
                                 <input type="submit" name="login" id="signin" class="form-submit" value="Log in"/>

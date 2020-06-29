@@ -1,3 +1,5 @@
+<!-- <a type="button" class="btn btn-warning btn-sm" href="delete_post.php?id='.$id.'" >delete</a>-->
+
 <?php 
 include("include/connection.php");
 
@@ -8,12 +10,16 @@ if(!isset($_SESSION['admin_name']))
     exit;
   }
 
-function creatpost($id,$imegeurl,$decr,$titel,$chambre,$surface,$adresse,$description,$datepub,$prix,$ville )
+function creatpost($id,$imegeurl,$decr,$titel,$chambre,$surface,$adresse,$description,$datepub,$prix,$ville,$idres,$date_debut,$date_fin )
 {
+    
+ $isres = (date($date_fin) <= date("Y-m-d"));
+    
 $postp ='<div class="item">
         <div class="thumb-item">
             <a href="details.php?id='.$id.'">
                 <img src="'.$imegeurl.'" alt="'.$decr.'" title="'.$decr.'">
+                <span>'.$prix.' DH</span>
             </a>
         </div>   
         <div class="body-item">
@@ -31,12 +37,19 @@ $postp ='<div class="item">
                 <div class="edit-item">
                 <ul>
                     <li>
-                        <a type="button" class="btn btn-warning btn-sm" href="delete_post.php?id='.$id.'" >delete</a>
-                        
+                    
+                        <a href="#" type="button" class="btndel" onclick="confermdelete('.$id.')" >delete</a>
                     </li>
                    
                 </ul>
                 </div>
+                <div class="addres">
+                <a href = "'.(($isres) ? '#' : 'stop_reserve_db.php?idpost='.$id.'&reserver='.$idres).'" class="card-banner card-blue-light" '.(($isres) ? 'onclick="addres('.$id.')"' : '').' >
+                '.(($isres) ? '<i class="zmdi zmdi-plus-circle-o"></i> ajouter un réservation ' : '<i class="zmdi zmdi-pause-circle-outline"></i> a '.$date_fin.' terminer maintenant ?').'
+                </a>
+                </div>
+                
+                
 			</div>
         </div>';
     
@@ -53,7 +66,8 @@ $vu = mysqli_fetch_row(mysqli_query($mysqli, $sqlvu));
 <html>
 <head>
     
-     
+    <link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css"> 
+    
 <style>
   /* Minified CSS Reset */
   html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font-size:100%;vertical-align:baseline;}
@@ -63,6 +77,7 @@ $vu = mysqli_fetch_row(mysqli_query($mysqli, $sqlvu));
 </style>
     
 <style>
+   
     /*-------top-continer---*/
     .top-continer{
         width: 100%;
@@ -118,7 +133,7 @@ $vu = mysqli_fetch_row(mysqli_query($mysqli, $sqlvu));
     display: block;
     border-radius: 4px;
     transition: all 0.2s ease;
-        margin: 25px 0;
+        margin: 13px 0;
     box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
     color: rgba(0,0,0, 0.87);
     }
@@ -194,6 +209,7 @@ $vu = mysqli_fetch_row(mysqli_query($mysqli, $sqlvu));
     background: #eee;
     overflow: hidden;
     margin-top: 20px;
+    margin-left: 20px;
     }
     
     .thumb-item {
@@ -201,6 +217,7 @@ $vu = mysqli_fetch_row(mysqli_query($mysqli, $sqlvu));
     width: 35%;
     height: 232px;
     margin-right: 17px;
+    position: relative;
     }
     
     .thumb-item img {
@@ -217,8 +234,7 @@ $vu = mysqli_fetch_row(mysqli_query($mysqli, $sqlvu));
     /*--------edit-item------*/
     .edit-item ul li {
     float: left;
-    padding-right: 15px;
-    padding-top: 12px;
+    padding-top: 22px;
     }
     .controlBar {
     text-align: right;
@@ -230,7 +246,242 @@ $vu = mysqli_fetch_row(mysqli_query($mysqli, $sqlvu));
 
     text-decoration: none;
     color: initial;
-}
+    }
+    .addres {
+    float: right;
+    }
+    .addres a {
+    padding: 10px;
+    color: #fff;
+    font-size: 16px;
+    }
+    .addres a i {
+    position: relative;
+    top: 1px;
+    }
+    .thumb-item span {
+    position: absolute;
+    top: 25px;
+    right: -9px;
+    background: #16a085;
+    border-radius: 15px;
+    padding: 3px 9px;
+    color: #fff;
+    font-weight: bolder;
+    }
+    
+    .forme {
+    background: #000000bd;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: none;
+    top: 0;
+    z-index: 9999;
+    }
+    
+    .closebtn {
+    position: absolute;
+    top: 10px;
+    right: 29px;
+    color: #222;
+    font-size: 35px;
+    cursor: pointer;
+    font-weight: bold;
+    }
+    
+    .btndel {
+    background: #ef0606;
+    border-radius: 3px;
+    padding: 9px;
+    color: #fff;
+    }
+    
+
+    /*add reserver----------------------*/
+    
+
+ input:focus, select:focus, textarea:focus {
+  outline: none;
+  box-shadow: none !important;}
+    
+.form-title {
+  line-height: 1.66;
+  margin: 0;
+  padding: 0;
+  font-weight: bold;
+  color: #222;
+  font-family: Poppins;
+  font-size: 36px; }
+
+.main {
+  background: #f8f8f8;
+  padding: 150px 0; }
+
+.forme {
+  font-size: 13px;
+  line-height: 1.8;
+  color: #222;
+  font-weight: 400;
+  font-family: Poppins; }
+
+.container {
+  width: 900px;
+  background: #fff;
+  margin: 34px auto;
+  box-shadow: 0px 15px 16.83px 0.17px rgba(0, 0, 0, 0.05);
+  border-radius: 20px;
+    position: relative;
+    }
+
+.display-flex {
+  justify-content: space-between;
+  align-items: center;
+  }
+
+.display-flex-center {
+  justify-content: center;
+  align-items: center;
+ }
+
+.form-title {
+  margin-bottom: 33px; }
+
+figure {
+  margin-bottom: 50px;
+  text-align: center; }
+
+.form-submit {
+  display: inline-block;
+  background: #6dabe4;
+  color: #fff;
+  border-bottom: none;
+  width: auto;
+  padding: 15px 39px;
+  border-radius: 5px;
+  margin-top: 25px;
+  cursor: pointer; }
+  .form-submit:hover {
+    background: #4292dc; }
+
+
+.term-service {
+  font-size: 13px;
+  color: #222; }
+
+
+.form-group {
+  position: relative;
+  margin-bottom: 25px;
+  overflow: hidden; }
+  .form-group:last-child {
+    margin-bottom: 0px; }
+
+.form-group input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #999;
+  padding: 6px 5px;
+  font-family: Poppins;
+  box-sizing: border-box; 
+font-size: 16px;
+       }
+.form-group span {
+    width: 100%;
+    font-family: Poppins;
+    font-size: 16px;
+    color: #6dabe4;;
+       }
+
+
+.agree-term {
+  display: inline-block;
+  width: auto; }
+
+
+.label-has-error {
+  top: 22%; }
+
+
+
+
+.signin-content {
+  padding-top: 22px;
+  padding-bottom: 40px; }
+
+.social-login {
+  align-items: center;
+
+  margin-top: 80px; }
+
+
+       
+ 
+
+  .form-button {
+    text-align: center; }
+
+  .signin-form {
+    order: 1;
+    margin-right: 0px;
+    margin-left: 0px;
+    padding: 0 30px; }
+
+  .form-title {
+    text-align: center; }
+       
+       
+       
+
+@media screen and (max-width: 1200px) {
+  .container {
+    width: calc( 100% - 30px);
+    max-width: 100%; } }
+@media screen and (min-width: 1024px) {
+  .container {
+    max-width: 1200px; } 
+    
+   
+        
+    
+    }
+
+    @media screen and (max-width: 1024px) {
+    
+    .thumb-item span {
+            right: 12px;
+        }
+        .thumb-item {
+            float: none; 
+            width: 100%;
+            margin-right: 0px;
+        }
+        
+        .body-item {
+            float: none;
+            width: 93%;
+            margin: auto;
+            margin-top: 19px;
+        }
+        
+       .item {
+            width: 90%;
+        }
+        
+        .continer {
+            width: 100%;
+        }
+        
+        
+    
+    }
+
+    
+    
+    
+
+    
+    
 </style>
     
 </head>
@@ -304,13 +555,17 @@ $vu = mysqli_fetch_row(mysqli_query($mysqli, $sqlvu));
    
         <?php 
         
-        $sql = 'SELECT m.idmaisan, adresse, surface,chambre,prix ,titel ,description ,datepub, p.urlphoto, p.decr , v.ville FROM maisan m inner join  photos p on p.idphoto = (select idphoto from photos ph where ph.idmaisan = m.idmaisan limit 1) inner join villes v on v.idville = m.idville  where iduser ='.$_SESSION['iduser'].' ;';
+        
+        $sql = "SELECT m.idmaisan, adresse, surface,chambre,prix ,titel ,description ,datepub, p.urlphoto, p.decr , v.ville ,r.idres,r.date_debut , r.date_fin FROM maisan m inner join photos p on p.idphoto = (select idphoto from photos ph where ph.idmaisan = m.idmaisan limit 1) inner join reserver r on r.idres = ( SELECT idres FROM reserver re WHERE re.idmaisan = m.idmaisan ORDER BY date_fin DESC LIMIT 1) inner join villes v on v.idville = m.idville where m.iduser =".$_SESSION['iduser']." ORDER BY datepub desc limit 50";
+        
+        
+        $sqlxxx = 'SELECT m.idmaisan, adresse, surface,chambre,prix ,titel ,description ,datepub, p.urlphoto, p.decr , v.ville FROM maisan m inner join  photos p on p.idphoto = (select idphoto from photos ph where ph.idmaisan = m.idmaisan limit 1) inner join villes v on v.idville = m.idville  where iduser ='.$_SESSION['iduser'].' ;';
         
          $result = mysqli_query($mysqli, $sql);
         
          if (mysqli_num_rows($result) > 0) {
             while($row = mysqli_fetch_assoc($result)) {   
-            creatpost( $row["idmaisan"],'img/'.$row["urlphoto"],$row["decr"],$row["titel"],$row["chambre"],$row["surface"],$row["adresse"],$row["description"],$row["datepub"],$row["prix"],$row["ville"]);
+            creatpost( $row["idmaisan"],'img/'.$row["urlphoto"],$row["decr"],$row["titel"],$row["chambre"],$row["surface"],$row["adresse"],$row["description"],$row["datepub"],$row["prix"],$row["ville"],$row["idres"],$row["date_debut"],$row["date_fin"]);
             }
          } else {
             echo "0 results";
@@ -323,6 +578,52 @@ $vu = mysqli_fetch_row(mysqli_query($mysqli, $sqlvu));
         
       
     </div>
+    <div class="forme" id="forme">
+            <div class="container">
+            <span onclick="this.parentElement.parentElement.style.display='none'" class="closebtn">&times;</span>
+
+                <div class="signin-content">
+                    <div class="signin-form">
+                        <h2 class="form-title">la réservation</h2>
+                        <form method="POST" action="reserve_db.php" class="register-form" id="login-form">
+                            <div class="form-group">
+                               <span >date de début : </span> <input type="date" required name="date_debut" />
+                            </div>
+                            <div class="form-group">
+                                <span >date de fin : </span> <input type="date" required name="date_fin" />
+                            </div>
+                            <input id="idpost" hidden type="text" required name="idpost" />
+                            
+                            <div class="form-group form-button">
+                                <input type="submit" name="login" id="signin" class="form-submit" value="réserver"/>
+                            </div>
+                        </form>
+                             <?php if(isset($_SESSION['msg'])){?>
+                                <div class="msg"> <?php echo $_SESSION['msg']; ?></div>
+                             <?php unset($_SESSION['msg']);}?>
+
+                    </div>
+                </div>
+            </div>
+
+    </div>
+
+ <script>
+     function addres(e) {
+         document.getElementById("idpost").setAttribute("value",e);
+         document.getElementById("forme").style.display = "block";
+
+     }
+     
+     function confermdelete(e) {
+             var result = confirm("Want to delete?");
+         if (result) {
+             window.location.replace(href="delete_post.php?id="+e);
+         }
+     }
+ 
+    </script>
+    
       
 </body>
 
