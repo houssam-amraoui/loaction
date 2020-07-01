@@ -228,7 +228,7 @@ $vu = mysqli_fetch_row(mysqli_query($mysqli, $sqlvu));
     .body-item {
     float: left;
     width: 61%;
-    margin-top: 40px;
+    margin-top: 21px;
     }
     
     /*--------edit-item------*/
@@ -431,6 +431,34 @@ font-size: 16px;
     text-align: center; }
        
        
+    
+       /* footer----------------------*/
+    
+    body{ 
+  display:flex; 
+  flex-direction:column; 
+}
+
+    .site-footer {
+    background: #16a085;
+    width: 100%;
+    height: 40px;
+        margin-top:auto; 
+        }
+    .site-footer img {
+    width: 100%;
+    height: 100%;
+        }
+    .focon {
+    width: 70px;
+    float: left;
+        }
+    .site-footer p {
+    text-align: center;
+    line-height: 37px;
+            color: #fff;
+        }
+    
        
 
 @media screen and (max-width: 1200px) {
@@ -478,11 +506,10 @@ font-size: 16px;
 
     
     
-    
-
-    
-    
 </style>
+    
+    
+   
     
 </head>
     
@@ -550,6 +577,22 @@ font-size: 16px;
         </div>
     </div>
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="continer">
     
    
@@ -607,6 +650,14 @@ font-size: 16px;
             </div>
 
     </div>
+    
+    
+    <div class="site-footer">
+    <div class="focon">
+        <img src="img/home-logo.png">
+    </div>  
+    <p> &copy; 2020 Location Nord. All Rights Reserved</p>
+</div>
 
  <script>
      function addres(e) {
@@ -616,7 +667,7 @@ font-size: 16px;
      }
      
      function confermdelete(e) {
-             var result = confirm("Want to delete?");
+             var result = confirm("Voulez-vous le supprimer ??");
          if (result) {
              window.location.replace(href="delete_post.php?id="+e);
          }
@@ -625,6 +676,8 @@ font-size: 16px;
     </script>
     
       
+    
+    
 </body>
 
 </html>

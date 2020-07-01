@@ -2,6 +2,22 @@
 include("include/connection.php");
 
 
+if(isset($_COOKIE["emaile"])&& !isset($_SESSION['admin_name']) ) {
+    
+  $qry="select * from users where email='".$_COOKIE["emaile"]."' and password='".$_COOKIE["passworde"]."'";
+		 
+		$result=mysqli_query($mysqli,$qry);	
+    		if(mysqli_num_rows($result) > 0)
+		{ 
+			$row=mysqli_fetch_assoc($result);
+
+			$_SESSION['iduser']=$row['iduser'];
+		    $_SESSION['admin_name']=$row['firstname']." ".$row['lastname'];
+            
+            				
+		}
+}
+
 
 function creatpost($id,$imegeurl,$decr,$titel,$chambre,$surface,$adresse,$description,$datepub,$prix,$ville,$idres,$date_debut,$date_fin)
 {
@@ -94,7 +110,6 @@ function showtoolbar(){
 
 ?> 
 
-<!DOCTYPE html>
 <html>
 
 <head>
@@ -237,6 +252,34 @@ function showtoolbar(){
     color: rgba(0,0,0, 0.87);
 }
     
+     /* footer----------------------*/
+    
+    body{ 
+  display:flex; 
+  flex-direction:column; 
+}
+
+    .site-footer {
+    background: #16a085;
+    width: 100%;
+    height: 40px;
+        margin-top:auto; 
+        }
+    .site-footer img {
+    width: 100%;
+    height: 100%;
+        }
+    .focon {
+    width: 70px;
+    float: left;
+        }
+    .site-footer p {
+    text-align: center;
+    line-height: 37px;
+            color: #fff;
+        }
+    
+    
     @media screen and (max-width: 1024px) {
         .thumb-item span {
             right: 12px;
@@ -350,31 +393,27 @@ function showtoolbar(){
             
             $sql = 'SELECT m.idmaisan, adresse, surface,chambre,prix ,titel ,description ,datepub, p.urlphoto, p.decr , v.ville ,r.idres,r.date_debut , r.date_fin FROM maisan m inner join photos p on p.idphoto  = (select idphoto from photos ph where ph.idmaisan = m.idmaisan limit 1) inner join reserver r on r.idres = ( SELECT idres FROM reserver re WHERE re.idmaisan = m.idmaisan ORDER BY date_fin DESC LIMIT 1) '.((isset($_POST["nores"])) ? 'and r.date_fin < now()' : '').' inner join villes v on v.idville = m.idville where v.idville = '.$_POST["ville"].' and (surface between '.(($_POST["sumin"] == "") ? "0" : $_POST["sumin"]).' and 
             '.(($_POST["sumax"] == "") ? "1000" : $_POST["sumax"]).') and  (prix between '.(($_POST["prmin"] == "") ? "0" : $_POST["prmin"]).' and '.(($_POST["prmax"] == "") ? "10000" : $_POST["prmax"]).') and chambre >= '.$_POST["chambre"].' ORDER BY datepub desc limit 50 ';
-            /*$str = 'In My Cart : 11 items';
-            $int = (int) filter_var($str, FILTER_SANITIZE_NUMBER_INT);
-            make sision an quiry
-            */
         }
-        
-        
-        
+
          $result = mysqli_query($mysqli, $sql);
 
          if (mysqli_num_rows($result) > 0) {
             while($row = mysqli_fetch_assoc($result)) {
-                creatpost($row["idmaisan"],'img/'.$row["urlphoto"],$row["decr"],$row["titel"],$row["chambre"],$row["surface"],$row["adresse"],$row["description"],$row["datepub"],$row["prix"],$row["ville"],$row["idres"],$row["date_debut"],$row["date_fin"]);
+             creatpost($row["idmaisan"],'img/'.$row["urlphoto"],$row["decr"],$row["titel"],$row["chambre"],$row["surface"],$row["adresse"],$row["description"],$row["datepub"],$row["prix"],$row["ville"],$row["idres"],$row["date_debut"],$row["date_fin"]);
             }
          } else {
             echo "0 results";
          }
-         mysqli_close($mysqli);
-        
-        
-        	
+         mysqli_close($mysqli);	
         ?>
-      
     </div>
     
+<div class="site-footer">
+    <div class="focon">
+        <img src="img/home-logo.png">
+    </div>  
+    <p> &copy; 2020 Location Nord. All Rights Reserved</p>
+</div>
     
    </body >
    </html>

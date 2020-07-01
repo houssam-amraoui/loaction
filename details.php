@@ -81,7 +81,6 @@ function showtoolbar(){
     
 ?> 
 
-<!DOCTYPE html>
 <html>
 
 <head>
@@ -147,7 +146,6 @@ function showtoolbar(){
     .card {
     box-shadow: 0px 8px 20px 0px rgba(0, 0, 0, 0.15);
     border-radius: 10px;
-    float: right;
     background: #fff;
     margin-top: 50px;
     padding: 40px;
@@ -168,11 +166,12 @@ function showtoolbar(){
     }
     
     /*----userSidbar---*/
-    .userimg{
+    .userimg {
     float: left;
-    border-radius: 50%;
+    border-radius: 50% 11% 57% 50%;
     background: #e07d94;
-    }
+    margin: 6px;
+}
 
 
     
@@ -202,8 +201,6 @@ function showtoolbar(){
 /* The expanding image container */
 .container {
   position: relative;
-    height: 484px;
-    width: 719px;
     overflow: hidden;
     object-fit: cover;
 }
@@ -238,6 +235,92 @@ function showtoolbar(){
     position: relative;
     top: -60px;
 }
+    .top-continer{
+        width: 100%;
+        position: relative;
+        background: #eee;
+        overflow: hidden;
+    }
+     
+     .header-top {
+        height: 34px;
+        background: #16a085;
+    }
+    #menu-top {
+    float: right;
+    padding-right: 10%;
+    }
+    #menu-top1{
+        float: left;
+        padding-left:4%;
+    }
+    #menu-top ul li,#menu-top1 ul li {
+    float: left;
+    }
+    #menu-top ul li a,#menu-top1 ul li a
+    {
+    color: #fff;
+    display: block;
+    padding: 0 10px;
+    font-size: 12px;
+    line-height: 34px;     
+    }
+    
+    .adress.time i {
+    padding-right: 5px;
+    }
+    .adress.time span {
+    padding-right: 7px;
+    }
+    
+    @media screen and (max-width: 1220px) {
+
+        .continer {
+            width: 100%;
+            padding: 15px;
+        }
+        .crrr {
+            float: none; 
+            width: 100%; 
+        }
+        .crl {
+            float: none;
+            width: 100%;
+        }
+        .crr {
+            float: none;
+            width: 100%;
+        }
+    }
+    
+    
+     /* footer----------------------*/
+    
+    body{ 
+  display:flex; 
+  flex-direction:column; 
+}
+
+    .site-footer {
+    background: #16a085;
+    width: 100%;
+    height: 40px;
+        margin-top:auto; 
+        }
+    .site-footer img {
+    width: 100%;
+    height: 100%;
+        }
+    .focon {
+    width: 70px;
+    float: left;
+        }
+    .site-footer p {
+    text-align: center;
+    line-height: 37px;
+            color: #fff;
+        }
+    
     
     </style>
 
@@ -270,7 +353,7 @@ function showtoolbar(){
                         echo '<div class="container"><img id="expandedImg" src="img/'.$row2["urlphoto"].'" style="width:100%"><div id="imgtext">'.$row2["decr"].'</div></div>';
                         echo '<div class="row">';
                     }  
-                    echo '<div class="column"><img src="img/'.$row2["urlphoto"].'" alt="'.$row2["decr"].'" style="width:100%" onclick="myFunction(this);"></div>';
+                    echo '<div class="column"><img src="img/'.$row2["urlphoto"].'" alt="'.$row2["decr"].'" style="width:100%;height: 100%;" onclick="myFunction(this);"></div>';
                         $conti++;
                     }
                     echo '</div>';
@@ -284,7 +367,7 @@ function showtoolbar(){
                     <span><?php echo $vu[0] ; ?> </span><i class="zmdi zmdi-eye"></i>
                 </div>
                 <div class="adress time">
-                <i class="zmdi zmdi-pin"></i> <span><?php echo $row["adresse"] ; ?> </span>
+                <i class="zmdi zmdi-pin"></i><span><?php echo $row["adresse"] ; ?></span>
                     <span>
                     <i class="zmdi zmdi-calendar"></i><?php echo $row["datepub"] ; ?></span>
                 </div>
@@ -316,6 +399,14 @@ function showtoolbar(){
     </div>
     </div>
     </div>
+    
+    
+    <div class="site-footer">
+    <div class="focon">
+        <img src="img/home-logo.png">
+    </div>  
+    <p> &copy; 2020 Location Nord. All Rights Reserved</p>
+</div>
     
     <script>
         function myFunction(imgs) {

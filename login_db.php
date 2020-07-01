@@ -35,8 +35,9 @@ include("include/msg.php");
 		    $_SESSION['admin_name']=$row['firstname']." ".$row['lastname'];
             
              if(isset($_POST["remember-me"]) ){
-                setcookie("email", $username, time() + (86400 * 7), "/");
-                setcookie("password", $password, time() + (86400 * 7), "/");
+                 
+                setcookie("emaile", $username, time() + (86400 * 7), "/");
+                setcookie("passworde", $password, time() + (86400 * 7), "/");
 			  }
 			header( "Location:home.php");
 			exit;
