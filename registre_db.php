@@ -21,11 +21,11 @@ include("include/msg.php");
         
 		if(!mysqli_query($mysqli,$qry)){
             $_SESSION['msg'] = mysqli_error($mysqli);
-            header( "Location:login.php");
+            header( "Location:registre.php");
             
         }else{
             $_SESSION['msg']= $client_msg['21'];
-            header( "Location:registre.php");
+            header( "Location:login.php");
             exit();
         }	
 		

@@ -267,12 +267,12 @@ if(isset($_POST["submit"])){
                     <div class="col-md-6">
                         <select name="chambre" class="form-control" required >
                         <option value="" disabled="disabled" selected="selected">chambre</option>
-                        <option value="1" >1 ou plus</option>
-                        <option value="2" >2 ou plus</option>
-                        <option value="3" >3 ou plus</option>
-                        <option value="4" >4 ou plus</option>
-                        <option value="5" >5 ou plus</option>
-                        <option value="6" >6 ou plus</option>
+                        <option value="1" >1 chambre</option>
+                        <option value="2" >2 chambre</option>
+                        <option value="3" >3 chambre</option>
+                        <option value="4" >4 chambre</option>
+                        <option value="5" >5 chambre</option>
+                        <option value="6" >6 chambre</option>
                     </select>
                         
                     </div>

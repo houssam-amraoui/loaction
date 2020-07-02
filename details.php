@@ -146,6 +146,7 @@ function showtoolbar(){
     .card {
     box-shadow: 0px 8px 20px 0px rgba(0, 0, 0, 0.15);
     border-radius: 10px;
+    float: right;
     background: #fff;
     margin-top: 50px;
     padding: 40px;
@@ -166,12 +167,12 @@ function showtoolbar(){
     }
     
     /*----userSidbar---*/
-    .userimg {
+    .userimg{
     float: left;
     border-radius: 50% 11% 57% 50%;
     background: #e07d94;
     margin: 6px;
-}
+    }
 
 
     
@@ -235,6 +236,9 @@ function showtoolbar(){
     position: relative;
     top: -60px;
 }
+    
+    
+    
     .top-continer{
         width: 100%;
         position: relative;
@@ -290,6 +294,7 @@ function showtoolbar(){
         .crr {
             float: none;
             width: 100%;
+            margin-top: 20px;
         }
     }
     
@@ -320,6 +325,9 @@ function showtoolbar(){
     line-height: 37px;
             color: #fff;
         }
+    
+    
+    
     
     
     </style>
@@ -353,7 +361,7 @@ function showtoolbar(){
                         echo '<div class="container"><img id="expandedImg" src="img/'.$row2["urlphoto"].'" style="width:100%"><div id="imgtext">'.$row2["decr"].'</div></div>';
                         echo '<div class="row">';
                     }  
-                    echo '<div class="column"><img src="img/'.$row2["urlphoto"].'" alt="'.$row2["decr"].'" style="width:100%;height: 100%;" onclick="myFunction(this);"></div>';
+                    echo '<div class="column"><img src="img/'.$row2["urlphoto"].'" alt="'.$row2["decr"].'" style="width:100%" onclick="myFunction(this);"></div>';
                         $conti++;
                     }
                     echo '</div>';
@@ -367,7 +375,7 @@ function showtoolbar(){
                     <span><?php echo $vu[0] ; ?> </span><i class="zmdi zmdi-eye"></i>
                 </div>
                 <div class="adress time">
-                <i class="zmdi zmdi-pin"></i><span><?php echo $row["adresse"] ; ?></span>
+                <i class="zmdi zmdi-pin"></i> <span><?php echo $row["adresse"] ; ?> </span>
                     <span>
                     <i class="zmdi zmdi-calendar"></i><?php echo $row["datepub"] ; ?></span>
                 </div>
@@ -399,15 +407,12 @@ function showtoolbar(){
     </div>
     </div>
     </div>
-    
-    
-    <div class="site-footer">
+     <div class="site-footer">
     <div class="focon">
         <img src="img/home-logo.png">
     </div>  
     <p> &copy; 2020 Location Nord. All Rights Reserved</p>
 </div>
-    
     <script>
         function myFunction(imgs) {
         var expandImg = document.getElementById("expandedImg");
